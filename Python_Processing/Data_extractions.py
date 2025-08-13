@@ -11,7 +11,7 @@ import mne
 import gc
 import os
 import numpy as np
-from Inner_Speech_Dataset.Python_Processing.Utilitys import sub_name, unify_names       # noqa
+from Python_Processing.Utilitys import sub_name, unify_names       # noqa
 import pickle
 from mne.io import Raw
 
@@ -68,21 +68,21 @@ def extract_data_from_subject(root_dir: str, n_s: int, datatype: str) -> tuple:
         if datatype == "eeg":
             # Load data and events
             file_name = (
-                f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_eeg-epo.fif"             # noqa
+                f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_eeg-epo.fif"             # noqa
             )
             X = mne.read_epochs(file_name, verbose='WARNING')
             data[n_b] = X._data
 
         elif datatype == "exg":
             file_name = (
-                f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_exg-epo.fif"             # noqa
+                f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_exg-epo.fif"             # noqa
             )
             X = mne.read_epochs(file_name, verbose='WARNING')
             data[n_b] = X._data
 
         elif datatype == "baseline":
             file_name = (
-                f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_baseline-epo.fif"        # noqa
+                f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}_baseline-epo.fif"        # noqa
             )
             X = mne.read_epochs(file_name, verbose='WARNING')
             data[n_b] = X._data
@@ -116,7 +116,7 @@ def extract_block_data_from_subject(root_dir: str, n_s: int,
     # Get events
     y = load_events(root_dir, n_s, n_b)
 
-    sub_dir = f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"
+    sub_dir = f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"
 
     if datatype == "eeg":
         # Load EEG data
@@ -155,7 +155,7 @@ def extract_report(root_dir: str, n_b: int, n_s: int):
     num_s = sub_name(n_s)
 
     # Save report
-    sub_dir = f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"
+    sub_dir = f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"
     file_name = f"{sub_dir}_report.pkl"
 
     with open(file_name, 'rb') as input_file:
@@ -216,7 +216,7 @@ def extract_data_multisubject(root_dir: str, n_s_list: list,
         for n_b in n_b_arr:
             num_s = sub_name(n_s)
 
-            base_file_name = f"{root_dir}/derivatives/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"            # noqa
+            base_file_name = f"{root_dir}/{num_s}/ses-0{n_b}/{num_s}_ses-0{n_b}"            # noqa
             events_file_name = f"{base_file_name}_events.dat"
             data_tmp_Y = np.load(events_file_name, allow_pickle=True)
             tmp_list_Y.append(data_tmp_Y)
@@ -296,7 +296,7 @@ def load_events(root_dir: str, n_s: int, n_b: int):
     num_s = sub_name(n_s)
 
     # Create file name
-    file_name = os.path.join(root_dir, "derivatives", num_s, f"ses-0{n_b}", f"{num_s}_ses-0{n_b}_events.dat")       # noqa
+    file_name = os.path.join(root_dir, num_s, f"ses-0{n_b}", f"{num_s}_ses-0{n_b}_events.dat")       # noqa
 
     # Load events
     events = np.load(file_name, allow_pickle=True)
