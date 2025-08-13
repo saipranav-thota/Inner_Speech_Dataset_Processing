@@ -7,3 +7,5 @@ extracted_data
 extracted_epochs_mne
 
 processed_epochs
+
+individual_channels
